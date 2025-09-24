@@ -1,0 +1,48 @@
+# Java
+*.class
+*.jar
+*.war
+*.zip
+*.tar.gz
+*.log
+.gradle
+/build/
+/target/
+.DS_Store
+.idea/
+.vscode/
+*.iml
+*.iws
+.project
+.classpath
+/bin/
+/out/
+/tmp/
+
+# Maven
+.mvn/wrapper/maven-wrapper.jar
+
+# Node
+node_modules/
+.env
+dist/
+build/
+
+# Docker
+.dockerignore
+!docker-compose.yml # Não ignorar o docker-compose.yml
+
+# IDEs
+.idea
+.vscode
+*.iml
+*.ipr
+*.iws
+
+# MacOS
+.DS_Store
+
+# Temporários
+*.swp
+*~
+.#*

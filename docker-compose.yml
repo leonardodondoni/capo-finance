@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  capo-finance-db:
+    image: postgres:15-alpine
+    container_name: capo-finance-db
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      POSTGRES_DB: ${DB_NAME:-capofinance}
+      POSTGRES_USER: ${DB_USER:-capofinance}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-capofinance}
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+  capo-finance-backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: capo-finance-backend
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://capo-finance-db:5432/${DB_NAME:-capofinance}
+      SPRING_DATASOURCE_USERNAME: ${DB_USER:-capofinance}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD:-capofinance}
+      SPRING_JPA_HIBERNATE_DDL_AUTO: none # Desabilitar auto-DDL para controle manual ou Flyway
+      SPRING_FLYWAY_ENABLED: "true" # Habilitar Flyway (mesmo que a pasta esteja vazia por enquanto)
+    ports:
+      - "8080:8080"
+    depends_on:
+      - capo-finance-db
+    # Para desenvolvimento, você pode comentar o "build" e usar "command" para live reload (necessita mvnw)
+    # command: sh -c "cd /app && ./mvnw spring-boot:run" # Certifique-se que o WORKDIR no Dockerfile é /app
+    # volumes:
+    #   - ./backend:/app # Montar o código para live reload se precisar rodar com mvnw dentro do container
+
+volumes:
+  db_data:
+    driver: local

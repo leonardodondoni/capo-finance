@@ -1,0 +1,29 @@
+spring:
+  application:
+    name: capo-finance-backend
+  datasource:
+    url: jdbc:postgresql://localhost:5432/capofinance # URL para rodar o backend localmente (fora do docker-compose)
+    username: capofinance
+    password: capofinancePass
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: none # Desabilita a criação automática de tabelas. Flyway será usado para isso.
+    show-sql: true # Mostrar queries SQL no console (para dev)
+    properties:
+      hibernate:
+        format_sql: true # Formatar SQL para melhor leitura
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+  flyway:
+    enabled: true # Habilita Flyway para migrações de banco
+    locations: classpath:db/migration # Local dos scripts de migração (vazio por enquanto)
+
+server:
+  port: 8080
+
+# Configurações para Springdoc-OpenAPI (Swagger)
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+  api-docs:
+    path: /v3/api-docs
